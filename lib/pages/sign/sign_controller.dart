@@ -45,9 +45,12 @@ class SignController extends GetxController {
     longitude = CryptoUtils.rsaEncrypt(longitude);
     try {
       await ApiService.sign(
-          userStore.userInfo!.userNumber, userStore.userInfo!.token,
-          addressController.text, latitude,
-          longitude);
+        userStore.userInfo!.userNumber,
+        userStore.userInfo!.token,
+        addressController.text,
+        latitude,
+        longitude,
+      );
       Get.snackbar('签到成功', '签到成功');
 
       signStore.isSigned.value = true;
@@ -62,11 +65,11 @@ class SignController extends GetxController {
   Future<void> updateAddress() async {
     if (latitudeController.text.isEmpty || longitudeController.text.isEmpty) {
       Get.snackbar('错误', '请填写经纬度');
-      return Future.error('请填写经纬度');
+      return;
     }
     if (addressController.text.isEmpty) {
       Get.snackbar('错误', '请填写地址');
-      return Future.error('请填写地址');
+      return;
     }
     await userStore.saveAddress(
       addressController.text,

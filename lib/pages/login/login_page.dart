@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:styled_widget/styled_widget.dart';
 
@@ -13,41 +14,33 @@ class LoginPage extends GetView<LoginController> {
     Get.put(LoginController());
 
     return Scaffold(
-      backgroundColor: const Color(0xfff6f7f8),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 60),
+              const Gap(60),
               // Logo和标题
-              const Icon(
-                Icons.school,
-                size: 80,
-                color: Color(0xFF4A90E2),
-              )
+              const Icon(Icons.school, size: 80, color: Color(0xFF4A90E2))
                   .center()
-                  .decorated(color: const Color(0xFFEEF5FF), shape: BoxShape.circle)
+                  .decorated(
+                    color: const Color(0xFFEEF5FF),
+                    shape: BoxShape.circle,
+                  )
                   .padding(vertical: 20),
-              const SizedBox(height: 16),
+              const Gap(16),
               const Text(
                 '习讯云签到',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF333333),
-                ),
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ).center(),
-              const SizedBox(height: 8),
+              const Gap(8),
               const Text(
                 '登录您的账号开始签到',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF999999),
-                ),
+                style: TextStyle(fontSize: 14, color: Color(0xFF999999)),
               ).center(),
-              const SizedBox(height: 48),
+              const Gap(48),
               // 账号输入
               TextField(
                 controller: controller.accountController,
@@ -67,10 +60,9 @@ class LoginPage extends GetView<LoginController> {
                     borderSide: const BorderSide(color: Color(0xFF4A90E2)),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
                 ),
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               // 密码输入
               TextField(
                 controller: controller.passwordController,
@@ -91,10 +83,9 @@ class LoginPage extends GetView<LoginController> {
                     borderSide: const BorderSide(color: Color(0xFF4A90E2)),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
                 ),
               ),
-              const SizedBox(height: 16),
+              const Gap(16),
               // 学校ID输入
               TextField(
                 controller: controller.schoolIdController,
@@ -115,14 +106,15 @@ class LoginPage extends GetView<LoginController> {
                     borderSide: const BorderSide(color: Color(0xFF4A90E2)),
                   ),
                   filled: true,
-                  fillColor: Colors.white,
                 ),
               ),
-              const SizedBox(height: 32),
+              const Gap(32),
               // 登录按钮
               Obx(
                 () => ElevatedButton(
-                  onPressed: controller.isLoading.value ? null : controller.login,
+                  onPressed: controller.isLoading.value
+                      ? null
+                      : controller.login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF4A90E2),
                     foregroundColor: Colors.white,
@@ -138,12 +130,17 @@ class LoginPage extends GetView<LoginController> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.white,
+                            ),
                           ),
                         )
                       : const Text(
                           '登录',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                 ),
               ),

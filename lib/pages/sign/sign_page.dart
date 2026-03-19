@@ -10,17 +10,16 @@ import 'package:xixyyy_sign/stores/sign_store.dart';
 class SignPage extends GetView<SignController> {
   const SignPage({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     Get.put(SignController());
     final signStore = Get.find<SignStore>();
     return SingleChildScrollView(
       child: [
-        _buildHeader(),
+        _buildHeader(context),
         const Gap(10),
         [
-          _buildDateInfo(),
+          _buildDateInfo(context),
           const Gap(20),
           Obx(() {
             final isSigned = signStore.isSigned.value;
@@ -31,21 +30,24 @@ class SignPage extends GetView<SignController> {
           }),
           const Gap(20),
           // _buildSimulation(),
-          _buildSimulation2()
+          _buildSimulation2(context),
         ].toColumn().paddingSymmetric(horizontal: 16),
       ].toColumn(),
     );
   }
 
-  Widget _buildHeader() {
+  Widget _buildHeader(BuildContext context) {
     return Text(
-      "XixyyySign",
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-      textAlign: TextAlign.center,
-    ).padding(vertical: 20).constrained(width: double.infinity).decorated(color: Colors.white);
+          "XixyyySign",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          textAlign: TextAlign.center,
+        )
+        .padding(vertical: 20)
+        .constrained(width: double.infinity)
+        .decorated(color: Theme.of(context).colorScheme.secondary);
   }
 
-  Widget _buildDateInfo() {
+  Widget _buildDateInfo(BuildContext context) {
     final signStore = Get.find<SignStore>();
     return [
           // 日期与签到信息
@@ -68,7 +70,9 @@ class SignPage extends GetView<SignController> {
                         Icon(
                           isSigned ? Icons.check_circle : Icons.info_outline,
                           size: 12,
-                          color: isSigned ? const Color(0xFF4CAF50) : Colors.amber[700],
+                          color: isSigned
+                              ? const Color(0xFF4CAF50)
+                              : Colors.amber[700],
                         ),
                         const Gap(8),
                         Text(
@@ -76,16 +80,15 @@ class SignPage extends GetView<SignController> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
-                            color: isSigned ? const Color(0xFF4CAF50) : Colors.amber[700],
+                            color: isSigned
+                                ? const Color(0xFF4CAF50)
+                                : Colors.amber[700],
                           ),
                         ),
                       ]
                       .toRow(mainAxisSize: MainAxisSize.min)
                       .padding(horizontal: 8, vertical: 4)
-                      .decorated(
-                        color: isSigned ? const Color(0xFFE8F5E9) : Colors.amber[50],
-                        borderRadius: BorderRadius.circular(8),
-                      );
+                      .decorated(borderRadius: BorderRadius.circular(8));
                 }),
               ]
               .toColumn(
@@ -100,9 +103,9 @@ class SignPage extends GetView<SignController> {
           crossAxisAlignment: CrossAxisAlignment.start,
         )
         .decorated(
-          color: Colors.white,
+          color: ShadTheme.of(context).colorScheme.card,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Color(0xffe2e8f0)),
+          border: Border.all(color: ShadTheme.of(context).colorScheme.border),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.05),
@@ -120,80 +123,89 @@ class SignPage extends GetView<SignController> {
         );
   }
 
-  Widget _buildSimulation2() {
+  Widget _buildSimulation2(BuildContext context) {
     return ExpansionTile(
-      title: [
-        Icon(Icons.location_on, size: 24, color: Colors.blue.shade600),
-        const Gap(8),
-        const Text(
-          "位置模拟",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      ].toRow(),
-      shape: const Border(),          // 去掉展开时的边框
-      collapsedShape: const Border(), // 去掉折叠时的边框
-      collapsedBackgroundColor: Colors.white,
-      childrenPadding: EdgeInsets.all(12),
-      children: [
-        [
-          [
-            const Text('经度'),
-            const Gap(5),
-            ShadInput(
-              controller: controller.latitudeController,
-              placeholder: const Text('输入经度'), // 建议改为 longitude
-              keyboardType: TextInputType.number,
-            ),
-          ].toColumn(crossAxisAlignment: CrossAxisAlignment.start).expanded(),
+          title: [
+            Icon(Icons.location_on, size: 24, color: Colors.blue.shade600),
+            const Gap(8),
+            const Text("位置模拟", style: TextStyle(fontSize: 16)),
+          ].toRow(),
+          shape: const Border(), // 去掉展开时的边框
+          collapsedShape: const Border(), // 去掉折叠时的边框
+          // collapsedBackgroundColor: ShadTheme.of(context).colorScheme.secondary,
+          childrenPadding: EdgeInsets.all(12),
+          children: [
+            [
+              [
+                    const Text('经度'),
+                    const Gap(5),
+                    ShadInput(
+                      controller: controller.latitudeController,
+                      placeholder: const Text('输入经度'), // 建议改为 longitude
+                      keyboardType: TextInputType.number,
+                    ),
+                  ]
+                  .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
+                  .expanded(),
 
-          // 关键：替换 .constrained(width: 100)
-          const Gap(12),
-          // 使用 Expanded 包裹第二个输入框组合
-          [
-            const Text('纬度'),
-            const Gap(5),
-            ShadInput(
-              controller: controller.longitudeController,
-              placeholder: const Text('输入纬度'),
-              keyboardType: TextInputType.number,
-              style: TextStyle(fontSize: 16),
+              // 关键：替换 .constrained(width: 100)
+              const Gap(12),
+              // 使用 Expanded 包裹第二个输入框组合
+              [
+                    const Text('纬度'),
+                    const Gap(5),
+                    ShadInput(
+                      controller: controller.longitudeController,
+                      placeholder: const Text('输入纬度'),
+                      keyboardType: TextInputType.number,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ]
+                  .toColumn(crossAxisAlignment: CrossAxisAlignment.start)
+                  .expanded(),
+              // 关键：替换 .constrained(width: 100)
+            ].toRow(),
+            const Gap(8),
+            // 使用 Expanded 包裹第一个输入框组合
+            [
+              const Text('签到地址'),
+              const Gap(5),
+              ShadInput(
+                controller: controller.addressController,
+                placeholder: const Text('输入签到地址'),
+                keyboardType: TextInputType.number,
+              ),
+            ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
+            const Gap(16),
+            ShadButton(
+              hoverBackgroundColor: Color(0xffe7f0fd),
+              width: double.infinity,
+              onPressed: controller.updateAddress,
+              leading: Icon(
+                Icons.refresh_outlined,
+                color: Colors.blue.shade600,
+                size: 18,
+              ),
+              decoration: ShadDecoration(
+                border: ShadBorder.all(radius: BorderRadius.circular(8)),
+              ),
+              backgroundColor: Color(0xffe7f0fd),
+              child: const Text(
+                '更新模拟位置',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
             ),
-          ].toColumn(crossAxisAlignment: CrossAxisAlignment.start).expanded(),
-          // 关键：替换 .constrained(width: 100)
-        ].toRow(),
-        const Gap(8),
-        // 使用 Expanded 包裹第一个输入框组合
-        [
-          const Text('签到地址'),
-          const Gap(5),
-          ShadInput(
-            controller: controller.addressController,
-            placeholder: const Text('输入签到地址'),
-            keyboardType: TextInputType.number,
-          ),
-        ].toColumn(crossAxisAlignment: CrossAxisAlignment.start),
-        const Gap(16),
-        ShadButton(
-          hoverBackgroundColor: Color(0xffe7f0fd),
-          width: double.infinity,
-          onPressed: controller.updateAddress,
-          leading: Icon(
-            Icons.refresh_outlined,
-            color: Colors.blue.shade600,
-            size: 18,
-          ),
-          decoration: ShadDecoration(border: ShadBorder.all(radius: BorderRadius.circular(8))),
-          backgroundColor: Color(0xffe7f0fd),
-          child: const Text(
-            '更新模拟位置',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
-          ),
-        ),
-      ],
-    ).clipRRect(clipBehavior: Clip.antiAlias).padding(all: 12).decorated(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(12),
-    );
+          ],
+        )
+        .clipRRect(clipBehavior: Clip.antiAlias)
+        .padding(all: 12)
+        .decorated(
+          color: ShadTheme.of(context).colorScheme.card,
+          borderRadius: BorderRadius.circular(12),
+        );
   }
 
   Widget _buildSignedIn() {
@@ -208,7 +220,7 @@ class SignPage extends GetView<SignController> {
             color: Colors.grey.withOpacity(0.3),
             blurRadius: 15,
             spreadRadius: 5,
-          )
+          ),
         ],
       ),
       child: Column(

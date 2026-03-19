@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gap/gap.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:styled_widget/styled_widget.dart';
 import 'package:xixyyy_sign/pages/record/record_controller.dart';
 
 class RecordPage extends GetView<RecordController> {
@@ -10,20 +12,20 @@ class RecordPage extends GetView<RecordController> {
   Widget build(BuildContext context) {
     Get.put(RecordController());
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF6F7F8),
-      appBar: AppBar(
-        title: const Text('签到记录'),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
-        elevation: 0,
-      ),
-      body: Obx(() {
+    return [
+      Text(
+            "签到记录",
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            textAlign: TextAlign.center,
+          )
+          .padding(vertical: 20)
+          .constrained(width: double.infinity)
+          .decorated(color: ShadTheme.of(context).colorScheme.secondary)
+          .border(bottom: 1, color: Colors.grey),
+      Obx(() {
         if (controller.signStore.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         }
-
         final signInfo = controller.signStore.signInfo;
 
         return RefreshIndicator(
@@ -35,6 +37,7 @@ class RecordPage extends GetView<RecordController> {
               Row(
                 children: [
                   _buildStatCard(
+                    context,
                     '本月签到',
                     '${controller.signStore.monthSignCount}',
                     '次',
@@ -43,6 +46,7 @@ class RecordPage extends GetView<RecordController> {
                   ),
                   const Gap(12),
                   _buildStatCard(
+                    context,
                     '连续签到',
                     '${controller.signStore.continuousSignIn}',
                     '天',
@@ -52,41 +56,55 @@ class RecordPage extends GetView<RecordController> {
                 ],
               ),
               const Gap(20),
-              // 签到记录列表
-              const Text(
+              Text(
                 '签到记录',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF333333),
+                  color: ShadTheme.of(
+                    context,
+                  ).colorScheme.primary.withOpacity(0.5),
                 ),
               ),
               const Gap(12),
               if (signInfo.value!.signInMonth.isEmpty)
-                const Center(
+                Center(
                   child: Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Text(
                       '本月暂无签到记录',
-                      style: TextStyle(color: Color(0xFF999999)),
+                      style: TextStyle(
+                        color: ShadTheme.of(
+                          context,
+                        ).colorScheme.primary.withOpacity(0.5),
+                      ),
                     ),
                   ),
                 )
               else
-                ...?signInfo.value?.signInMonth.map((item) => _buildSignItem(item)),
+                ...?signInfo.value?.signInMonth.map(
+                  (item) => _buildSignItem(context, item),
+                ),
             ],
           ),
         );
-      }),
-    );
+      }).expanded(),
+    ].toColumn();
   }
 
-  Widget _buildStatCard(String title, String value, String unit, IconData icon, Color color) {
+  Widget _buildStatCard(
+    BuildContext context,
+    String title,
+    String value,
+    String unit,
+    IconData icon,
+    Color color,
+  ) {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: ShadTheme.of(context).colorScheme.card,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
@@ -141,12 +159,12 @@ class RecordPage extends GetView<RecordController> {
     );
   }
 
-  Widget _buildSignItem(dynamic item) {
+  Widget _buildSignItem(BuildContext context, dynamic item) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: ShadTheme.of(context).colorScheme.card,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -165,10 +183,7 @@ class RecordPage extends GetView<RecordController> {
               color: const Color(0xFFEEF5FF),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Icon(
-              Icons.check_circle,
-              color: Color(0xFF4A90E2),
-            ),
+            child: const Icon(Icons.check_circle, color: Color(0xFF4A90E2)),
           ),
           const Gap(12),
           Expanded(
@@ -180,7 +195,6 @@ class RecordPage extends GetView<RecordController> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Color(0xFF333333),
                   ),
                 ),
                 const Gap(4),
