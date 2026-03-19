@@ -34,7 +34,10 @@ void main() async {
     }
   }
 
-  Get.put(ThemeStore());
+  // 初始化 ThemeStore
+  final themeStore = Get.put(ThemeStore());
+  await themeStore.init();
+
   runApp(const MyApp());
 }
 

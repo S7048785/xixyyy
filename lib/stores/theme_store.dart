@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -7,7 +6,7 @@ class ThemeStore extends GetxController {
 
   final _isDarkMode = false.obs;
 
-  void init() async {
+  Future<void> init() async {
     final prefs = await SharedPreferences.getInstance();
     final themeMode = prefs.getBool(_keyThemeMode);
     if (themeMode == true) {
